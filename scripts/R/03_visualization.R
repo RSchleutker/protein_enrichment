@@ -10,7 +10,7 @@ trellis.device(
 
 bwplot(
   Mean_Enrichment ~ Construct,
-  data = enrichment_per_embryo,
+  data = data_enrichment_per_embryo,
   groups = Construct,
   subset = Protein == "M6"
   & Driver == "69B-Gal4"
@@ -57,7 +57,7 @@ trellis.device(
 
 bwplot(
   Mean_Enrichment ~ Construct,
-  data = enrichment_per_embryo,
+  data = data_enrichment_per_embryo,
   groups = Construct,
   subset = Protein == "M6"
   & Driver == "Endogenous"
@@ -105,7 +105,7 @@ trellis.device(
 
 bwplot(
   Mean_Enrichment ~ Construct,
-  data = enrichment_per_embryo,
+  data = data_enrichment_per_embryo,
   groups = Construct,
   subset = Protein == "M6"
   & Driver == "Endogenous"
@@ -153,7 +153,7 @@ trellis.device(
 
 bwplot(
   Mean_Enrichment ~ Construct,
-  data = enrichment_per_embryo,
+  data = data_enrichment_per_embryo,
   groups = Construct,
   subset = Protein == "Aka"
   & Driver == "Endogenous"
@@ -202,7 +202,7 @@ trellis.device(
 
 bwplot(
   Mean_Enrichment ~ Construct,
-  data = enrichment_per_embryo,
+  data = data_enrichment_per_embryo,
   groups = Construct,
   subset = Protein == "Gli"
   & Driver == "Endogenous"
@@ -249,7 +249,7 @@ trellis.device(
 
 bwplot(
   Mean_Enrichment ~ interaction(Protein, Construct, Driver, lex.order = TRUE),
-  data = enrichment_per_embryo,
+  data = data_enrichment_per_embryo,
   subset = (
     Protein %in% c("Nrg", "M6") &
       Construct != "Delta-Palm" &
@@ -311,7 +311,7 @@ trellis.device(
 
 bwplot(
   Mean_Enrichment ~ Construct,
-  data = filter(enrichment_per_embryo, Protein == "Scribble") %>% droplevels(),
+  data = filter(data_enrichment_per_embryo, Protein == "Scribble") %>% droplevels(),
   groups = Construct,
   # subset = Protein == "Scribble",
   panel = function(x, y, ...) {
@@ -365,7 +365,7 @@ trellis.device(
 bwplot(
   Mean_Enrichment ~ Construct | Protein,
   data = filter(
-    enrichment_per_embryo,
+    data_enrichment_per_embryo,
     Protein %in% c("Aka", "Gli"),
     Construct %in% c("WT", "Delta-Palm", "Aka[PDZB]", "Aka[PDZB]Gli[PDZB]")
   ) %>% droplevels(),
@@ -425,9 +425,9 @@ trellis.device(
 
 xyplot(
   Mean_Enrichment ~ Mean_Expression,
-  data = combined,
+  data = data_combined,
   groups = Construct == "Delta-Palm",
-  construct = combined$Construct,
+  construct = data_combined$Construct,
   panel = \(x, y, construct, ...) {
     print(construct)
     panel.grid(-1, -1)
@@ -460,7 +460,7 @@ trellis.device(
 
 bwplot(
   Mean ~ Construct,
-  data = expression,
+  data = data_expression,
   panel = \(x, y, ...) {
     panel.grid(-1, -1)
     panel.bwplot(x, y, ..., outlier = FALSE)
@@ -495,3 +495,29 @@ bwplot(
 )
 
 dev.off()
+
+
+
+## Export plots ================================================================
+
+# Loop through all objects in the global environment and consider all those with
+# names starting with 'plot_[...]'.
+for (obj in ls(pattern = "plot_")) {
+  current_plot <- get(obj)
+  
+  for (fmt in c("pdf", "png")) {
+    device <- get(fmt)
+    filename <- file.path(OUTPUT, "plots", paste0(obj, ".", fmt))
+    
+    if (fmt == "pdf")
+      device(file = filename, WIDTH / 25, HEIGHT / 25)
+    else
+      device(file = filename, WIDTH, HEIGHT, units = "mm", res = DPI)
+    
+    trellis.par.set(theme)
+    print(current_plot)
+    
+    dev.off()
+    
+  }
+}
