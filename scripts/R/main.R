@@ -9,6 +9,10 @@ source_folder <- file.path("scripts", "R")
 
 ## Constants ===================================================================
 
+WIDTH <- 24
+HEIGHT <- 35
+DPI <- 300
+
 # Vectors to change strings to factors in tables frame. The names attribute
 # contains the string and the actual value will be the name of the level.
 CNSTRCTS <- c(
@@ -75,4 +79,4 @@ source(file.path(source_folder, "01_data_cleanup.R"))
 source(file.path(source_folder, "02_statistics.R"))
 
 # Create and export plots ------------------------------------------------------
-source(file.path(source_folder, "03_visualiaztion.R"))
+source(file.path(source_folder, "03_visualization.R"))

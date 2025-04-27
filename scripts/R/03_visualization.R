@@ -1,14 +1,7 @@
 ## Plot intensities ============================================================
 
 # Plot for transgene enrichment (WT vs. Palmitoylation)
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_transgene.pdf",
-  width = 24 / 25,
-  height = 35 / 25
-)
-
-bwplot(
+plot_enrichment_transgene <- bwplot(
   Mean_Enrichment ~ Construct,
   data = data_enrichment_per_embryo,
   groups = Construct,
@@ -42,20 +35,11 @@ bwplot(
   do.out = FALSE,
   ylim = c(.8, 12.5),
   par.settings = theme,
-)
-
-dev.off()
+) |> print()
 
 
 # Plot for CRISPR enrichment homozygous (WT vs. Palmitoylation)
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_homozygous.pdf",
-  width = 24 / 25,
-  height = 35 / 25
-)
-
-bwplot(
+plot_enrichment_homozygous <- bwplot(
   Mean_Enrichment ~ Construct,
   data = data_enrichment_per_embryo,
   groups = Construct,
@@ -90,20 +74,11 @@ bwplot(
   do.out = FALSE,
   ylim = c(.8, 12.5),
   par.settings = theme,
-)
-
-dev.off()
+) |> print()
 
 
 # Plot for CRISPR enrichment heterozygous (WT vs. Palmitoylation)
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_heterozygous.pdf",
-  width = 24 / 25,
-  height = 35 / 25
-)
-
-bwplot(
+plot_enrichment_heterozygous <- bwplot(
   Mean_Enrichment ~ Construct,
   data = data_enrichment_per_embryo,
   groups = Construct,
@@ -138,20 +113,11 @@ bwplot(
   do.out = FALSE,
   ylim = c(.8, 12.5),
   par.settings = theme,
-)
-
-dev.off()
+) |> print()
 
 
 # Plot for CRISPR enrichment homozygous Aka (WT vs. Palmitoylation)
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_anakonda.pdf",
-  width = 24 / 25,
-  height = 35 / 25
-)
-
-bwplot(
+plot_enrichment_anakonda <- bwplot(
   Mean_Enrichment ~ Construct,
   data = data_enrichment_per_embryo,
   groups = Construct,
@@ -187,20 +153,11 @@ bwplot(
   xlim = c(.4, 2.6),
   ylim = c(.8, 12.5),
   par.settings = theme
-)
-
-dev.off()
+) |> print()
 
 
 # Plot for CRISPR enrichment homozygous Aka (WT vs. Palmitoylation)
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_gliotactin.pdf",
-  width = 38 / 25,
-  height = 53.5 / 25
-)
-
-bwplot(
+plot_enrichment_gliotactin <- bwplot(
   Mean_Enrichment ~ Construct,
   data = data_enrichment_per_embryo,
   groups = Construct,
@@ -234,20 +191,14 @@ bwplot(
   xlim = c(.4, 2.6),
   ylim = c(.8, 12.5),
   par.settings = theme,
-)
+) |> print()
 
-dev.off()
+attr(plot_enrichment_gliotactin, "width") <- 38
+attr(plot_enrichment_gliotactin, "height") <- 53.5
 
 
 # Plot for different isoforms.
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_isoforms_2.pdf",
-  width = 68 / 25,
-  height = 63 / 25
-)
-
-bwplot(
+plot_enrichment_isoforms_2 <- bwplot(
   Mean_Enrichment ~ interaction(Protein, Construct, Driver, lex.order = TRUE),
   data = data_enrichment_per_embryo,
   subset = (
@@ -296,20 +247,14 @@ bwplot(
   do.out = FALSE,
   ylim = c(.8, 12.5),
   par.settings = theme,
-)
+) |> print()
 
-dev.off()
+attr(plot_enrichment_isoforms_2, "width") <- 68
+attr(plot_enrichment_isoforms_2, "height") <- 63
 
 
 # Plot for CRISPR enrichment homozygous Aka (WT vs. Palmitoylation)
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_scribble.pdf",
-  width = 52 / 25,
-  height = 42 / 25
-)
-
-bwplot(
+plot_enrichment_scribble <- bwplot(
   Mean_Enrichment ~ Construct,
   data = filter(data_enrichment_per_embryo, Protein == "Scribble") %>% droplevels(),
   groups = Construct,
@@ -349,20 +294,14 @@ bwplot(
     y = list(alternating = 1, tck=c(1, 0))
   ),
   par.settings = theme
-)
+) |> print()
 
-dev.off()
+attr(plot_enrichment_scribble, "width") <- 52
+attr(plot_enrichment_scribble, "height") <- 42
 
 
 # Plot for CRISPR enrichment homozygous Aka (WT vs. Palmitoylation)
-trellis.device(
-  device = "pdf",
-  file = "output/plots/enrichment_anakonda_pdzb.pdf",
-  width = 38.5 / 25,
-  height = 60 / 25
-)
-
-bwplot(
+plot_enrichment_anakonda_pdzb <- bwplot(
   Mean_Enrichment ~ Construct | Protein,
   data = filter(
     data_enrichment_per_embryo,
@@ -374,8 +313,6 @@ bwplot(
   panel = function(x, y, ...) {
     panel.grid(-1, -1)
     panel.abline(h = 1.9, lty = "dashed")
-    
-    print(x)
     
     panel.bwplot(x, y, ...)
     panel.xyplot(as.integer(x) + .33, y, jitter.x = TRUE, amount = .1, ...)
@@ -409,27 +346,19 @@ bwplot(
     y = list(alternating = 1, tck=c(1, 0))
   ),
   par.settings = theme
-)
+) |> print()
 
-dev.off()
+attr(plot_enrichment_anakonda_pdzb, "width") <- 38.5
+attr(plot_enrichment_anakonda_pdzb, "height") <- 60
 
 
 ## Plot expression data ========================================================
-
-trellis.device(
-  device = "pdf",
-  file = "output/plots/expression_enrichment_relation.pdf",
-  width = 65 / 25,
-  height = 45.8 / 25
-)
-
-xyplot(
+plot_expression_relation <- xyplot(
   Mean_Enrichment ~ Mean_Expression,
   data = data_combined,
   groups = Construct == "Delta-Palm",
   construct = data_combined$Construct,
   panel = \(x, y, construct, ...) {
-    print(construct)
     panel.grid(-1, -1)
     panel.xyplot(x, y, pch = 16, ...)
     panel.lines(x, predict(model, data.frame(Mean_Expression = x)), col = "black")
@@ -446,9 +375,10 @@ xyplot(
   ylab = "Enrichment",
   ylim = c(1.7, 5.3),
   par.settings = theme
-)
+) |> print()
 
-dev.off()
+attr(plot_expression_relation, "width") <- 65
+attr(plot_expression_relation, "height") <- 45.8
 
 
 trellis.device(
@@ -458,7 +388,7 @@ trellis.device(
   height = 51 / 25
 )
 
-bwplot(
+plot_expression_levels <- bwplot(
   Mean ~ Construct,
   data = data_expression,
   panel = \(x, y, ...) {
@@ -492,9 +422,10 @@ bwplot(
   ),
   col = "#00000040",
   par.settings = theme
-)
+) |> print()
 
-dev.off()
+attr(plot_enrichment_gliotactin, "width") <- 65
+attr(plot_enrichment_gliotactin, "height") <- 51
 
 
 
@@ -505,14 +436,20 @@ dev.off()
 for (obj in ls(pattern = "plot_")) {
   current_plot <- get(obj)
   
+  width <- attr(current_plot, "Width")
+  height <- attr(current_plot, "height")
+  
+  if(is.null(width)) width <- WIDTH
+  if(is.null(height)) height <- HEIGHT
+  
   for (fmt in c("pdf", "png")) {
     device <- get(fmt)
-    filename <- file.path(OUTPUT, "plots", paste0(obj, ".", fmt))
+    filename <- file.path("output", "plots", paste0(obj, ".", fmt))
     
     if (fmt == "pdf")
-      device(file = filename, WIDTH / 25, HEIGHT / 25)
+      device(file = filename, width / 25, height / 25)
     else
-      device(file = filename, WIDTH, HEIGHT, units = "mm", res = DPI)
+      device(file = filename, width, height, units = "mm", res = DPI)
     
     trellis.par.set(theme)
     print(current_plot)
